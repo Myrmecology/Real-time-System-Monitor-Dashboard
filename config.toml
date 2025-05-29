@@ -1,0 +1,17 @@
+[dashboard]
+title = "System Monitor Dashboard"
+refresh_rate_ms = 1000
+max_history_entries = 100
+
+[system]
+enable_process_monitoring = true
+max_processes_displayed = 20
+cpu_history_length = 60
+memory_history_length = 60
+
+[display]
+show_cpu_graph = true
+show_memory_graph = true
+show_process_list = true
+show_network_info = true
+show_disk_info = true
