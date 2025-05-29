@@ -1,5 +1,5 @@
 use std::collections::VecDeque;
-use sysinfo::{System, Cpu, Disk, Networks, Process};
+use sysinfo::{System, Disks, Networks};
 use chrono::{DateTime, Local};
 
 #[derive(Debug, Clone)]
@@ -166,8 +166,8 @@ impl SystemMonitor {
     }
 
     pub fn disk_info(&self) -> Vec<DiskInfo> {
-        self.system
-            .disks()
+        let disks = Disks::new_with_refreshed_list();
+        disks
             .iter()
             .map(|disk| {
                 let total = disk.total_space();
