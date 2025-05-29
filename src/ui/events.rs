@@ -12,9 +12,12 @@ impl EventHandler {
     }
 
     pub async fn next_event(&mut self) -> Option<Event> {
-        // Poll for events with a timeout to prevent blocking
-        if poll(Duration::from_millis(100)).unwrap_or(false) {
-            event::read().ok()
+        // Use a very short timeout to make it more responsive
+        if poll(Duration::from_millis(50)).unwrap_or(false) {
+            match event::read() {
+                Ok(event) => Some(event),
+                Err(_) => None,
+            }
         } else {
             None
         }
@@ -45,6 +48,7 @@ pub fn should_quit(event: &Event) -> bool {
 
 pub fn handle_key_event(event: KeyEvent) -> Option<AppAction> {
     match event {
+        // Quit commands
         KeyEvent {
             code: KeyCode::Char('q'),
             modifiers: KeyModifiers::NONE,
@@ -60,6 +64,8 @@ pub fn handle_key_event(event: KeyEvent) -> Option<AppAction> {
             modifiers: KeyModifiers::NONE,
             ..
         } => Some(AppAction::Quit),
+        
+        // Tab navigation
         KeyEvent {
             code: KeyCode::Tab,
             modifiers: KeyModifiers::NONE,
@@ -70,6 +76,22 @@ pub fn handle_key_event(event: KeyEvent) -> Option<AppAction> {
             modifiers: KeyModifiers::SHIFT,
             ..
         } => Some(AppAction::PrevTab),
+        
+        // Arrow key navigation - more explicit matching
+        KeyEvent {
+            code: KeyCode::Up,
+            modifiers: KeyModifiers::NONE,
+            kind: crossterm::event::KeyEventKind::Press,
+            ..
+        } => Some(AppAction::ScrollUp),
+        KeyEvent {
+            code: KeyCode::Down,
+            modifiers: KeyModifiers::NONE,
+            kind: crossterm::event::KeyEventKind::Press,
+            ..
+        } => Some(AppAction::ScrollDown),
+        
+        // Also handle arrow keys without explicit kind matching (fallback)
         KeyEvent {
             code: KeyCode::Up,
             modifiers: KeyModifiers::NONE,
@@ -80,6 +102,8 @@ pub fn handle_key_event(event: KeyEvent) -> Option<AppAction> {
             modifiers: KeyModifiers::NONE,
             ..
         } => Some(AppAction::ScrollDown),
+        
+        // Other commands
         KeyEvent {
             code: KeyCode::Char('r'),
             modifiers: KeyModifiers::NONE,
@@ -90,6 +114,7 @@ pub fn handle_key_event(event: KeyEvent) -> Option<AppAction> {
             modifiers: KeyModifiers::NONE,
             ..
         } => Some(AppAction::Help),
+        
         _ => None,
     }
 }
