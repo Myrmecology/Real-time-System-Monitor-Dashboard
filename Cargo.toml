@@ -1,0 +1,42 @@
+[package]
+name = "system-monitor"
+version = "0.1.0"
+edition = "2021"
+description = "Real-time System Monitor Dashboard built with Rust"
+authors = ["Your Name <your.email@example.com>"]
+
+[[bin]]
+name = "system-monitor"
+path = "src/main.rs"
+
+[dependencies]
+# TUI and Terminal
+ratatui = "0.26"
+crossterm = { version = "0.27", features = ["event-stream"] }
+
+# System Information
+sysinfo = "0.30"
+
+# Async Runtime
+tokio = { version = "1.0", features = ["full"] }
+tokio-util = "0.7"
+
+# CLI and Configuration
+clap = { version = "4.4", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+toml = "0.8"
+
+# Utilities
+chrono = { version = "0.4", features = ["serde"] }
+anyhow = "1.0"
+log = "0.4"
+env_logger = "0.10"
+
+# Collections and Data Structures
+indexmap = "2.0"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
