@@ -1,5 +1,5 @@
 use std::collections::VecDeque;
-use sysinfo::{System, SystemExt, CpuExt, DiskExt, NetworkExt, NetworksExt, ProcessExt};
+use sysinfo::{System, Cpu, Disk, Networks, Process};
 use chrono::{DateTime, Local};
 
 #[derive(Debug, Clone)]
@@ -154,15 +154,15 @@ impl SystemMonitor {
     }
 
     pub fn uptime(&self) -> u64 {
-        self.system.uptime()
+        System::uptime()
     }
 
     pub fn boot_time(&self) -> u64 {
-        self.system.boot_time()
+        System::boot_time()
     }
 
     pub fn load_average(&self) -> sysinfo::LoadAvg {
-        self.system.load_average()
+        System::load_average()
     }
 
     pub fn disk_info(&self) -> Vec<DiskInfo> {
@@ -193,8 +193,8 @@ impl SystemMonitor {
     }
 
     pub fn network_info(&self) -> Vec<NetworkInfo> {
-        self.system
-            .networks()
+        let networks = Networks::new_with_refreshed_list();
+        networks
             .iter()
             .map(|(interface, data)| NetworkInfo {
                 interface: interface.clone(),
