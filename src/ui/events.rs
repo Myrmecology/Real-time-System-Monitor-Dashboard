@@ -1,6 +1,5 @@
-use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers};
+use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers, poll};
 use std::time::Duration;
-use tokio::time::timeout;
 
 #[derive(Debug)]
 pub struct EventHandler {
@@ -14,9 +13,10 @@ impl EventHandler {
 
     pub async fn next_event(&mut self) -> Option<Event> {
         // Poll for events with a timeout to prevent blocking
-        match timeout(Duration::from_millis(100), event::read()).await {
-            Ok(Ok(event)) => Some(event),
-            _ => None, // Timeout or error
+        if poll(Duration::from_millis(100)).unwrap_or(false) {
+            event::read().ok()
+        } else {
+            None
         }
     }
 }
