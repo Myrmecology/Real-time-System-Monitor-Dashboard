@@ -300,4 +300,4 @@ This project showcases:
 
 **Built with ❤️ in Rust** 🦀
 
-Happy coding 
+Happy coding everyone 
