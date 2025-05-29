@@ -1,16 +1,15 @@
 use ratatui::{
     buffer::Buffer,
-    layout::{Constraint, Direction, Layout, Rect},
+    layout::{Constraint, Rect},
     style::{Color, Modifier, Style},
     symbols,
-    text::{Line, Span, Text},
+    text::{Line, Span},
     widgets::{
         Axis, Block, Borders, Chart, Dataset, Gauge, List, ListItem, Paragraph, Row, 
-        Sparkline, Table, Widget, Wrap,
+        Table, Widget, Wrap,
     },
 };
-use std::collections::VecDeque;
-use crate::system::{SystemMonitor, CpuData, MemoryData, DiskInfo, NetworkInfo};
+use crate::system::SystemMonitor;
 
 pub struct CpuWidget;
 
