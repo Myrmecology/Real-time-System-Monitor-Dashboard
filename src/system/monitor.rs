@@ -186,7 +186,7 @@ impl SystemMonitor {
                     available_space: available,
                     used_space: used,
                     usage_percent,
-                    file_system: String::from_utf8_lossy(disk.file_system()).to_string(),
+                    file_system: disk.file_system().to_string_lossy().to_string(),
                 }
             })
             .collect()
