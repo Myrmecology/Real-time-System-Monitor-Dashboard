@@ -78,10 +78,10 @@ impl Dashboard {
 
     fn render_tabs(&self, f: &mut Frame, area: Rect) {
         let tab_titles = vec![
-            "Overview",
-            "Processes", 
-            "Network",
-            "Help"
+            "1. Overview",
+            "2. Processes", 
+            "3. Network",
+            "4. Help"
         ];
 
         let tabs = Tabs::new(tab_titles)
@@ -205,11 +205,15 @@ impl Dashboard {
             ]),
             Line::from(vec![
                 Span::styled("  Tab / Shift+Tab", Style::default().fg(Color::Green)),
-                Span::raw("  - Switch between tabs"),
+                Span::raw("  - Switch between tabs (with 150ms delay for smooth navigation)"),
+            ]),
+            Line::from(vec![
+                Span::styled("  1, 2, 3, 4", Style::default().fg(Color::Green)),
+                Span::raw("       - Jump directly to Overview, Processes, Network, Help"),
             ]),
             Line::from(vec![
                 Span::styled("  ↑ / ↓", Style::default().fg(Color::Green)),
-                Span::raw("           - Scroll process list"),
+                Span::raw("           - Scroll process list (in Processes tab)"),
             ]),
             Line::from(vec![
                 Span::styled("  r", Style::default().fg(Color::Green)),
@@ -220,16 +224,27 @@ impl Dashboard {
                 Span::styled("Tabs:", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
             ]),
             Line::from(vec![
-                Span::styled("  Overview", Style::default().fg(Color::Green)),
-                Span::raw("        - CPU, Memory, Disk usage with charts"),
+                Span::styled("  1. Overview", Style::default().fg(Color::Green)),
+                Span::raw("     - CPU, Memory, Disk usage with live charts"),
             ]),
             Line::from(vec![
-                Span::styled("  Processes", Style::default().fg(Color::Green)),
-                Span::raw("       - Running processes sorted by CPU"),
+                Span::styled("  2. Processes", Style::default().fg(Color::Green)),
+                Span::raw("    - Running processes sorted by CPU usage"),
             ]),
             Line::from(vec![
-                Span::styled("  Network", Style::default().fg(Color::Green)),
-                Span::raw("         - Network interface statistics"),
+                Span::styled("  3. Network", Style::default().fg(Color::Green)),
+                Span::raw("      - Network interface statistics"),
+            ]),
+            Line::from(vec![
+                Span::styled("  4. Help", Style::default().fg(Color::Green)),
+                Span::raw("         - This help screen"),
+            ]),
+            Line::from(""),
+            Line::from(vec![
+                Span::styled("Note:", Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD)),
+            ]),
+            Line::from(vec![
+                Span::raw("  Charts need ~30 seconds to build history data"),
             ]),
             Line::from(""),
             Line::from(vec![
@@ -258,14 +273,22 @@ impl Dashboard {
     }
 
     fn render_status_bar(&self, f: &mut Frame, area: Rect) {
-        let status_text = match self.current_tab {
-            TabIndex::Overview => "Tab: Switch tabs | r: Refresh | q: Quit",
-            TabIndex::Processes => "↑↓: Scroll | Tab: Switch tabs | r: Refresh | q: Quit",
-            TabIndex::Network => "Tab: Switch tabs | r: Refresh | q: Quit",
-            TabIndex::Help => "Tab: Switch tabs | q: Quit",
+        let current_tab_name = match self.current_tab {
+            TabIndex::Overview => "Overview",
+            TabIndex::Processes => "Processes", 
+            TabIndex::Network => "Network",
+            TabIndex::Help => "Help",
         };
 
-        let status = Paragraph::new(status_text)
+        let status_text = match self.current_tab {
+            TabIndex::Overview => "Tab/1-4: Switch tabs | r: Refresh | q: Quit",
+            TabIndex::Processes => "↑↓: Scroll | Tab/1-4: Switch tabs | r: Refresh | q: Quit",
+            TabIndex::Network => "Tab/1-4: Switch tabs | r: Refresh | q: Quit",
+            TabIndex::Help => "Tab/1-4: Switch tabs | q: Quit",
+        };
+
+        let full_status = format!("Current: {} | {}", current_tab_name, status_text);
+        let status = Paragraph::new(full_status)
             .style(Style::default().fg(Color::Gray));
 
         f.render_widget(status, area);
@@ -282,6 +305,7 @@ impl Dashboard {
                     AppAction::Quit => return Ok(true),
                     AppAction::NextTab => self.next_tab(),
                     AppAction::PrevTab => self.prev_tab(),
+                    AppAction::GoToTab(index) => self.go_to_tab(index),
                     AppAction::ScrollUp => self.scroll_up(),
                     AppAction::ScrollDown => self.scroll_down(),
                     AppAction::Refresh => {
@@ -309,6 +333,13 @@ impl Dashboard {
         let prev = if current == 0 { 3 } else { current - 1 };
         self.current_tab = TabIndex::from(prev);
         self.process_scroll_offset = 0; // Reset scroll when switching tabs
+    }
+
+    fn go_to_tab(&mut self, index: usize) {
+        if index < 4 {
+            self.current_tab = TabIndex::from(index);
+            self.process_scroll_offset = 0; // Reset scroll when switching tabs
+        }
     }
 
     fn scroll_up(&mut self) {
