@@ -1,12 +1,11 @@
 use ratatui::{
-    backend::Backend,
     layout::{Constraint, Direction, Layout, Rect},
     style::{Color, Modifier, Style},
     text::{Line, Span},
     widgets::{Block, Borders, Paragraph, Tabs},
     Frame,
 };
-use crossterm::event::{Event, KeyEvent};
+use crossterm::event::Event;
 use anyhow::Result;
 
 use crate::config::Settings;
@@ -51,7 +50,7 @@ impl Dashboard {
         }
     }
 
-    pub fn render<B: Backend>(&mut self, f: &mut Frame<B>, monitor: &SystemMonitor) {
+    pub fn render(&mut self, f: &mut Frame, monitor: &SystemMonitor) {
         let size = f.size();
 
         // Create main layout
@@ -79,7 +78,7 @@ impl Dashboard {
         self.render_status_bar(f, chunks[2]);
     }
 
-    fn render_tabs<B: Backend>(&self, f: &mut Frame<B>, area: Rect) {
+    fn render_tabs(&self, f: &mut Frame, area: Rect) {
         let tab_titles = vec![
             "Overview",
             "Processes", 
@@ -105,7 +104,7 @@ impl Dashboard {
         f.render_widget(tabs, area);
     }
 
-    fn render_overview<B: Backend>(&self, f: &mut Frame<B>, area: Rect, monitor: &SystemMonitor) {
+    fn render_overview(&self, f: &mut Frame, area: Rect, monitor: &SystemMonitor) {
         // Create layout for overview
         let main_chunks = Layout::default()
             .direction(Direction::Vertical)
@@ -144,7 +143,7 @@ impl Dashboard {
         DiskWidget::render(monitor, bottom_chunks[1], f.buffer_mut());
     }
 
-    fn render_processes<B: Backend>(&self, f: &mut Frame<B>, area: Rect, monitor: &SystemMonitor) {
+    fn render_processes(&self, f: &mut Frame, area: Rect, monitor: &SystemMonitor) {
         // Create layout for processes
         let chunks = Layout::default()
             .direction(Direction::Vertical)
@@ -167,7 +166,7 @@ impl Dashboard {
         ProcessWidget::render(monitor, chunks[1], f.buffer_mut(), self.process_scroll_offset);
     }
 
-    fn render_network<B: Backend>(&self, f: &mut Frame<B>, area: Rect, monitor: &SystemMonitor) {
+    fn render_network(&self, f: &mut Frame, area: Rect, monitor: &SystemMonitor) {
         // Create layout for network
         let chunks = Layout::default()
             .direction(Direction::Vertical)
@@ -195,7 +194,7 @@ impl Dashboard {
         NetworkWidget::render(monitor, chunks[1], f.buffer_mut());
     }
 
-    fn render_help<B: Backend>(&self, f: &mut Frame<B>, area: Rect) {
+    fn render_help(&self, f: &mut Frame, area: Rect) {
         let help_text = vec![
             Line::from(""),
             Line::from(vec![
@@ -260,7 +259,7 @@ impl Dashboard {
         f.render_widget(help_paragraph, area);
     }
 
-    fn render_status_bar<B: Backend>(&self, f: &mut Frame<B>, area: Rect) {
+    fn render_status_bar(&self, f: &mut Frame, area: Rect) {
         let status_text = match self.current_tab {
             TabIndex::Overview => "Tab: Switch tabs | r: Refresh | q: Quit",
             TabIndex::Processes => "↑↓: Scroll | Tab: Switch tabs | r: Refresh | q: Quit",
