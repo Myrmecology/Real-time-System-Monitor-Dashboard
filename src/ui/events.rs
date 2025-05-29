@@ -1,119 +1,98 @@
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyModifiers, poll};
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 #[derive(Debug)]
 pub struct EventHandler {
-    // We can add more sophisticated event handling later
+    last_key_time: Option<Instant>,
+    key_debounce_ms: u64,
 }
 
 impl EventHandler {
     pub fn new() -> Self {
-        Self {}
+        Self {
+            last_key_time: None,
+            key_debounce_ms: 150, // 150ms debounce for tab switching
+        }
     }
 
     pub async fn next_event(&mut self) -> Option<Event> {
-        // Use a very short timeout to make it more responsive
-        if poll(Duration::from_millis(50)).unwrap_or(false) {
+        // Use a longer timeout to prevent rapid key repeats
+        if poll(Duration::from_millis(100)).unwrap_or(false) {
             match event::read() {
-                Ok(event) => Some(event),
+                Ok(event) => {
+                    // Apply debouncing for certain keys
+                    if let Event::Key(key_event) = &event {
+                        if self.should_debounce_key(key_event) {
+                            let now = Instant::now();
+                            if let Some(last_time) = self.last_key_time {
+                                if now.duration_since(last_time).as_millis() < self.key_debounce_ms as u128 {
+                                    return None; // Ignore this key press (too soon)
+                                }
+                            }
+                            self.last_key_time = Some(now);
+                        }
+                    }
+                    Some(event)
+                }
                 Err(_) => None,
             }
         } else {
             None
         }
     }
+
+    fn should_debounce_key(&self, key_event: &KeyEvent) -> bool {
+        // Apply debouncing to tab navigation keys to prevent rapid switching
+        matches!(key_event.code, 
+            KeyCode::Tab | 
+            KeyCode::BackTab
+        )
+    }
 }
 
 // Helper functions for handling specific events
 pub fn should_quit(event: &Event) -> bool {
-    match event {
+    matches!(event,
         Event::Key(KeyEvent {
             code: KeyCode::Char('q'),
             modifiers: KeyModifiers::NONE,
             ..
-        }) => true,
-        Event::Key(KeyEvent {
+        }) | Event::Key(KeyEvent {
             code: KeyCode::Char('c'),
             modifiers: KeyModifiers::CONTROL,
             ..
-        }) => true,
-        Event::Key(KeyEvent {
+        }) | Event::Key(KeyEvent {
             code: KeyCode::Esc,
             modifiers: KeyModifiers::NONE,
             ..
-        }) => true,
-        _ => false,
-    }
+        })
+    )
 }
 
 pub fn handle_key_event(event: KeyEvent) -> Option<AppAction> {
-    match event {
+    match (event.code, event.modifiers) {
         // Quit commands
-        KeyEvent {
-            code: KeyCode::Char('q'),
-            modifiers: KeyModifiers::NONE,
-            ..
-        } => Some(AppAction::Quit),
-        KeyEvent {
-            code: KeyCode::Char('c'),
-            modifiers: KeyModifiers::CONTROL,
-            ..
-        } => Some(AppAction::Quit),
-        KeyEvent {
-            code: KeyCode::Esc,
-            modifiers: KeyModifiers::NONE,
-            ..
-        } => Some(AppAction::Quit),
+        (KeyCode::Char('q'), KeyModifiers::NONE) => Some(AppAction::Quit),
+        (KeyCode::Char('c'), KeyModifiers::CONTROL) => Some(AppAction::Quit),
+        (KeyCode::Esc, KeyModifiers::NONE) => Some(AppAction::Quit),
         
-        // Tab navigation
-        KeyEvent {
-            code: KeyCode::Tab,
-            modifiers: KeyModifiers::NONE,
-            ..
-        } => Some(AppAction::NextTab),
-        KeyEvent {
-            code: KeyCode::BackTab,
-            modifiers: KeyModifiers::SHIFT,
-            ..
-        } => Some(AppAction::PrevTab),
+        // Tab navigation - only on key press, not release
+        (KeyCode::Tab, KeyModifiers::NONE) => Some(AppAction::NextTab),
+        (KeyCode::BackTab, KeyModifiers::SHIFT) => Some(AppAction::PrevTab),
         
-        // Arrow key navigation - more explicit matching
-        KeyEvent {
-            code: KeyCode::Up,
-            modifiers: KeyModifiers::NONE,
-            kind: crossterm::event::KeyEventKind::Press,
-            ..
-        } => Some(AppAction::ScrollUp),
-        KeyEvent {
-            code: KeyCode::Down,
-            modifiers: KeyModifiers::NONE,
-            kind: crossterm::event::KeyEventKind::Press,
-            ..
-        } => Some(AppAction::ScrollDown),
+        // Alternative navigation with numbers
+        (KeyCode::Char('1'), KeyModifiers::NONE) => Some(AppAction::GoToTab(0)),
+        (KeyCode::Char('2'), KeyModifiers::NONE) => Some(AppAction::GoToTab(1)),
+        (KeyCode::Char('3'), KeyModifiers::NONE) => Some(AppAction::GoToTab(2)),
+        (KeyCode::Char('4'), KeyModifiers::NONE) => Some(AppAction::GoToTab(3)),
         
-        // Also handle arrow keys without explicit kind matching (fallback)
-        KeyEvent {
-            code: KeyCode::Up,
-            modifiers: KeyModifiers::NONE,
-            ..
-        } => Some(AppAction::ScrollUp),
-        KeyEvent {
-            code: KeyCode::Down,
-            modifiers: KeyModifiers::NONE,
-            ..
-        } => Some(AppAction::ScrollDown),
+        // Arrow key navigation (no debouncing for smoother scrolling)
+        (KeyCode::Up, KeyModifiers::NONE) => Some(AppAction::ScrollUp),
+        (KeyCode::Down, KeyModifiers::NONE) => Some(AppAction::ScrollDown),
         
         // Other commands
-        KeyEvent {
-            code: KeyCode::Char('r'),
-            modifiers: KeyModifiers::NONE,
-            ..
-        } => Some(AppAction::Refresh),
-        KeyEvent {
-            code: KeyCode::Char('h'),
-            modifiers: KeyModifiers::NONE,
-            ..
-        } => Some(AppAction::Help),
+        (KeyCode::Char('r'), KeyModifiers::NONE) => Some(AppAction::Refresh),
+        (KeyCode::Char('h'), KeyModifiers::NONE) => Some(AppAction::Help),
         
         _ => None,
     }
@@ -124,6 +103,7 @@ pub enum AppAction {
     Quit,
     NextTab,
     PrevTab,
+    GoToTab(usize),
     ScrollUp,
     ScrollDown,
     Refresh,

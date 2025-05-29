@@ -37,7 +37,6 @@ pub struct Dashboard {
     settings: Settings,
     current_tab: TabIndex,
     process_scroll_offset: usize,
-    show_help: bool,
 }
 
 impl Dashboard {
@@ -46,7 +45,6 @@ impl Dashboard {
             settings,
             current_tab: TabIndex::Overview,
             process_scroll_offset: 0,
-            show_help: false,
         }
     }
 
@@ -323,9 +321,5 @@ impl Dashboard {
         if self.current_tab == TabIndex::Processes {
             self.process_scroll_offset += 1;
         }
-    }
-
-    pub fn current_tab(&self) -> &TabIndex {
-        &self.current_tab
     }
 }
