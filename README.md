@@ -2,6 +2,8 @@
 
 A high-performance, real-time system monitoring dashboard built entirely in Rust. This terminal-based (TUI) application provides comprehensive system insights with beautiful visualizations, live charts, and interactive navigation.
 
+For a video DEMO of this project, please visit: https://www.youtube.com/watch?v=hS2n7LYf040
+
 ## 🚀 Features
 
 ### **Real-time Monitoring**
