@@ -302,4 +302,4 @@ This project showcases:
 
 **Built with ❤️ in Rust** 🦀
 
-Happy coding everyone 
+Happy coding everyone and best of luck with future projects 

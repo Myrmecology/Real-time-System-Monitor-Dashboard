@@ -44,3 +44,7 @@ node_modules/
 
 # Local configuration (if you have sensitive settings)
 local.toml
+
+# GPG public key exports (safe to ignore)
+*.asc
+
