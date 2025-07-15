@@ -1,4 +1,4 @@
-# Real-time System Monitor Dashboard
+# Real-time System Monitor Dashboard 🦀
 
 A high-performance, real-time system monitoring dashboard built entirely in Rust. This terminal-based (TUI) application provides comprehensive system insights with beautiful visualizations, live charts, and interactive navigation.
 
@@ -6,7 +6,7 @@ For a video DEMO of this project, please visit: https://www.youtube.com/watch?v=
 
 ## 🚀 Features
 
-### **Real-time Monitoring**
+### **Real-time Monitoring** 🦀
 - **CPU Usage**: Live monitoring with historical charts and multi-core detection
 - **Memory Usage**: Real-time RAM and swap monitoring with trend visualization
 - **Process Management**: Live process list sorted by CPU usage with memory details
@@ -14,7 +14,7 @@ For a video DEMO of this project, please visit: https://www.youtube.com/watch?v=
 - **Network Statistics**: Interface-level network traffic and packet monitoring
 - **System Information**: Uptime, load averages, and process counts
 
-### **Interactive TUI Interface**
+### **Interactive TUI Interface** 🦀
 - **Multiple Tabs**: Overview, Processes, Network, and Help sections
 - **Live Charts**: Historical CPU and memory usage graphs using Braille patterns
 - **Color-coded Widgets**: Visual indicators with red/yellow/green status colors
@@ -22,28 +22,28 @@ For a video DEMO of this project, please visit: https://www.youtube.com/watch?v=
 - **Responsive Design**: Adapts to different terminal sizes
 - **Professional Styling**: Clean, modern terminal interface
 
-### **Performance & Architecture**
+### **Performance & Architecture** 🦀
 - **100% Rust**: Memory-safe, high-performance system programming
 - **Async Architecture**: Non-blocking event handling with Tokio
 - **Cross-platform**: Works on Windows, macOS, and Linux
 - **Low Resource Usage**: Minimal CPU and memory footprint
 - **Configurable**: TOML-based configuration system
 
-## 📋 Prerequisites
+## 📋 Prerequisites 🦀
 
 - **Rust 1.70+**: Install from [rustup.rs](https://rustup.rs/)
 - **Terminal**: Any modern terminal with Unicode support
 - **Operating System**: Windows 10+, macOS 10.12+, or Linux
 
-## 🛠️ Installation & Setup
+## 🛠️ Installation & Setup 🦀
 
-### **1. Clone the Repository**
+### **1. Clone the Repository** 🦀
 ```bash
 git clone https://github.com/Myrmecology/Real-time-System-Monitor-Dashboard.git
 cd Real-time-System-Monitor-Dashboard
 ```
 
-### **2. Build the Project**
+### **2. Build the Project** 🦀
 ```bash
 # Check that everything compiles
 cargo check
@@ -55,7 +55,7 @@ cargo build --release
 cargo run
 ```
 
-### **3. Install Dependencies**
+### **3. Install Dependencies** 🦀
 All dependencies are automatically handled by Cargo. Key dependencies include:
 - `ratatui` - Terminal UI framework
 - `sysinfo` - System information collection
@@ -65,7 +65,7 @@ All dependencies are automatically handled by Cargo. Key dependencies include:
 
 ## 🎮 Usage
 
-### **Running the Application**
+### **Running the Application** 🦀
 ```bash
 # Run with default settings
 cargo run
@@ -83,7 +83,7 @@ cargo run -- --debug
 cargo run -- --help
 ```
 
-### **Command Line Options**
+### **Command Line Options** 🦀
 ```
 USAGE:
     system-monitor [OPTIONS]
@@ -95,36 +95,36 @@ OPTIONS:
     -h, --help              Print help information
 ```
 
-## ⌨️ Controls & Navigation
+## ⌨️ Controls & Navigation 🦀
 
 ### **Tab Navigation**
 - **Tab / Shift+Tab**: Cycle through tabs (with smooth 150ms delay)
 - **1, 2, 3, 4**: Jump directly to Overview, Processes, Network, Help
 - **Current tab**: Displayed in status bar
 
-### **Process List (Processes Tab)**
+### **Process List (Processes Tab)** 🦀
 - **↑ / ↓ Arrow Keys**: Scroll through process list
 - **Processes**: Automatically sorted by CPU usage (highest first)
 
-### **General Controls**
+### **General Controls** 🦀
 - **r**: Force refresh system data
 - **h**: Jump to help screen
 - **q / Esc / Ctrl+C**: Quit application
 
-### **Tab Descriptions**
+### **Tab Descriptions** 🦀
 1. **Overview**: CPU/Memory gauges, historical charts, system info, disk usage
 2. **Processes**: Live process list with CPU/memory usage, scrollable
 3. **Network**: Network interface statistics and traffic data
 4. **Help**: Comprehensive help and keyboard shortcuts
 
-## 📊 Dashboard Sections
+## 📊 Dashboard Sections 🦀
 
-### **Overview Tab**
+### **Overview Tab** 🦀
 - **Top Row**: Real-time CPU and Memory usage gauges
 - **Middle Row**: Historical charts showing CPU and Memory trends over time
 - **Bottom Row**: System information (uptime, processes, load) and disk usage table
 
-### **Processes Tab**
+### **Processes Tab** 🦀
 - **Summary Bar**: Quick CPU and Memory overview
 - **Process List**: Scrollable list showing:
   - Process ID (PID)
@@ -133,16 +133,16 @@ OPTIONS:
   - Process name
   - Sorted by CPU usage (highest first)
 
-### **Network Tab**
+### **Network Tab** 🦀
 - **Summary Bar**: System overview widgets
 - **Network Table**: Interface statistics showing:
   - Interface name
   - Bytes received/transmitted
   - Packets received/transmitted
 
-## ⚙️ Configuration
+## ⚙️ Configuration 🦀
 
-### **Default Configuration File (config.toml)**
+### **Default Configuration File (config.toml)** 🦀
 ```toml
 [dashboard]
 title = "System Monitor Dashboard"
@@ -163,14 +163,14 @@ show_network_info = true
 show_disk_info = true
 ```
 
-### **Configuration Options**
+### **Configuration Options** 🦀
 - **refresh_rate_ms**: How often to update data (milliseconds)
 - **max_history_entries**: Maximum data points for charts
 - **cpu_history_length**: CPU chart history length
 - **memory_history_length**: Memory chart history length
 - **max_processes_displayed**: Processes to show per page
 
-## 🏗️ Project Structure
+## 🏗️ Project Structure 🦀
 
 ```
 Real-time-System-Monitor-Dashboard/
@@ -198,7 +198,7 @@ Real-time-System-Monitor-Dashboard/
         └── helpers.rs       # Helper functions
 ```
 
-## 🔧 Technical Details
+## 🔧 Technical Details 🦀
 
 ### **Architecture**
 - **Async Event Loop**: Non-blocking UI updates with system monitoring
@@ -206,13 +206,13 @@ Real-time-System-Monitor-Dashboard/
 - **Memory Management**: Efficient data structures with bounded history
 - **Error Handling**: Comprehensive error handling with `anyhow`
 
-### **Performance**
+### **Performance** 🦀
 - **Minimal CPU Usage**: Efficient system data collection
 - **Memory Efficient**: Bounded data structures prevent memory leaks
 - **Responsive UI**: 60+ FPS rendering capability
 - **Cross-platform**: Native performance on all supported platforms
 
-### **Dependencies**
+### **Dependencies** 🦀
 ```toml
 [dependencies]
 ratatui = "0.26"              # Terminal UI framework
@@ -228,7 +228,7 @@ log = "0.4"                   # Logging framework
 env_logger = "0.10"           # Environment-based logging
 ```
 
-## 📈 Data Collection
+## 📈 Data Collection 🦀
 
 ### **System Metrics**
 - **CPU**: Usage percentage, frequency, core count
@@ -238,44 +238,44 @@ env_logger = "0.10"           # Environment-based logging
 - **Network**: Interface names, bytes/packets transmitted/received
 - **System**: Uptime, boot time, load averages, process count
 
-### **Chart Data**
+### **Chart Data** 🦀
 - **Historical Data**: Last 60 data points by default
 - **Update Frequency**: 1-second intervals (configurable)
 - **Chart Types**: Line charts with Braille character rendering
 - **Data Retention**: Automatic cleanup of old data points
 
-## 🚨 Important Notes
+## 🚨 Important Notes 🦀
 
-### **Chart Initialization**
+### **Chart Initialization** 🦀
 - **Memory charts need ~30 seconds** to build meaningful historical data
 - **CPU charts start immediately** but become more useful over time
 - **First run**: Charts may appear empty initially - this is normal
 
-### **Process List**
+### **Process List** 🦀
 - **Sorted by CPU usage** (highest first)
 - **Real-time updates** every second
 - **Memory shown in MB** for readability
 - **Scrolling available** with arrow keys
 
-### **Platform Differences**
+### **Platform Differences** 🦀
 - **Windows**: Shows many `.exe` processes (normal system behavior)
 - **macOS/Linux**: Different process naming conventions
 - **Network interfaces**: Names vary by platform
 
-## 🐛 Troubleshooting
+## 🐛 Troubleshooting 🦀
 
-### **Common Issues**
+### **Common Issues** 🦀
 1. **Charts not showing data**: Wait 30+ seconds for history to build
 2. **High CPU usage**: Increase refresh interval with `--refresh 2`
 3. **Terminal rendering issues**: Ensure Unicode support in terminal
 4. **Permission errors**: Some system info may require elevated privileges
 
-### **Performance Tips**
+### **Performance Tips** 🦀
 - **Increase refresh interval** for lower resource usage
 - **Resize terminal** if widgets appear cramped
 - **Use release build** (`cargo build --release`) for better performance
 
-## 🤝 Contributing
+## 🤝 Contributing 🦀
 
 This project demonstrates modern Rust development practices:
 - **Safe Systems Programming**: Memory-safe system monitoring
@@ -284,11 +284,11 @@ This project demonstrates modern Rust development practices:
 - **Error Handling**: Robust error management strategies
 - **Project Organization**: Clean, modular architecture
 
-## 📝 License
+## 📝 License 🦀
 
 I used a MIT License for this project 
 
-## 🎯 Learning Outcomes
+## 🎯 Learning Outcomes 🦀
 
 This project showcases:
 - **Advanced Rust Programming**: Ownership, lifetimes, async/await
