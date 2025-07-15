@@ -303,3 +303,5 @@ This project showcases:
 **Built with ❤️ in Rust** 🦀
 
 Happy coding everyone and best of luck with future projects 
+
+One last thing, in the future I plan on building a video game that includes this project
