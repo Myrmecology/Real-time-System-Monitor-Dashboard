@@ -304,4 +304,7 @@ This project showcases:
 
 Happy coding everyone and best of luck with future projects 
 
-One last thing, in the future I plan on building a video game that includes this project
+One last thing, in the future I plan on building a video game that includes this project!!
+Plans for future changes:
+1. more advanced UI
+2. more interactive UX
